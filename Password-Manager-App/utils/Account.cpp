@@ -8,10 +8,15 @@
 #include "Account.h"
 
 
-Account::Account(std::string name, std::string user_name, std::string pw, std::string url)
+Account::Account(std::string&& name, std::string&& user_name, std::string&& pw, std::string&& url)
 : m_AccountName(name), m_AccountUserName(user_name), m_Password(pw), m_URL(url)
 {
     m_Created = std::chrono::system_clock::now();
+}
+
+Account::Account(Account& other)
+{
+    std::cout << m_AccountName << " was copied." << std::endl;
 }
 
 Account::~Account()

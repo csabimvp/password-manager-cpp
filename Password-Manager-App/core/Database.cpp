@@ -9,9 +9,12 @@
 #include "../utils/Account.h"
 #include <fstream>
 
-std::vector<std::string> Database::ParseLine(std::string &row)
+std::vector<std::string> Database::ParseLine(std::string&& row)
 {
+    // Creating a vector for each row, and reserving 5 items to increase performance.
+    // This 5 needs to be incremented once we are adding more data into the rows.
     std::vector<std::string> rowData;
+    rowData.reserve(5);
     size_t start = 0;
     bool inQuotes = false;
     
@@ -31,9 +34,10 @@ std::vector<std::string> Database::ParseLine(std::string &row)
     return rowData;
 }
 
-std::vector<std::vector<std::string>> Database::LoadDatabase(const std::string &fileName)
+std::vector<std::vector<std::string>> Database::LoadDatabase(const std::string& fileName)
 {
     std::vector<std::vector<std::string>> data;
+    data.reserve(20);
     std::ifstream file(fileName);
     
     if (!file.is_open())
@@ -44,7 +48,7 @@ std::vector<std::vector<std::string>> Database::LoadDatabase(const std::string &
     std::string line;
     while (std::getline(file, line))
     {
-        data.push_back(ParseLine(line));
+        data.push_back(ParseLine(std::move(line)));
     }
     
     file.close();
@@ -59,11 +63,16 @@ Database::Database(const std::string& file_name)
     
     for (auto item : m_RawData)
     {
-        Account* acc_ptr = new Account(item[0], item[1], item[2], item[3]);
+        Account* acc_ptr = new Account(std::move(item[0]), std::move(item[1]), std::move(item[2]), std::move(item[3]));
         m_Accounts.push_back(acc_ptr);
     }
     
     std::cout << "#" << m_RawData.size() << " Accounts loaded." << std::endl;
+}
+
+Database::Database(Database& other)
+{
+    std::cout << "Database was copied." << std::endl;
 }
 
 Database::~Database()
@@ -113,7 +122,7 @@ void Database::AddAccount(Account* acc_ptr)
     m_Accounts.push_back(acc_ptr);
 }
 
-void Database::DeleteAccount(int acc_index)
+void Database::DeleteAccount(const int& acc_index)
 {
     delete m_Accounts[acc_index];
     m_Accounts.erase(m_Accounts.begin()+acc_index);

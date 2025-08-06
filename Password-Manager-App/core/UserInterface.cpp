@@ -80,7 +80,7 @@ Account* ActionAddAccount()
     std::cout << "Enter URL: ";
     std::getline(std::cin, url);
     
-    Account* acc_ptr = new Account(account_name, account_user_name, password, url);
+    Account* acc_ptr = new Account(std::move(account_name), std::move(account_user_name), std::move(password), std::move(url));
     return acc_ptr;
 }
 

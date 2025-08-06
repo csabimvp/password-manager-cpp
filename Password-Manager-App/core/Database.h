@@ -21,12 +21,13 @@ private:
     std::vector<Account*> m_Accounts;
 public:
     Database(const std::string& file_name);
+    Database(Database& other);
     ~Database();
-    std::vector<std::string> ParseLine(std::string &row);
-    std::vector<std::vector<std::string>> LoadDatabase(const std::string &fileName);
+    std::vector<std::string> ParseLine(std::string&& row);
+    std::vector<std::vector<std::string>> LoadDatabase(const std::string& fileName);
     void PrintAll();
     void AddAccount(Account* acc_ptr);
-    void DeleteAccount(int acc_index);
+    void DeleteAccount(const int& acc_index);
     void SaveDatabase();
 };
 

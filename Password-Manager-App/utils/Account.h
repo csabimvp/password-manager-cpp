@@ -21,7 +21,8 @@ private:
     std::string m_URL;
     std::chrono::system_clock::time_point m_Created;
 public:
-    Account(std::string name, std::string user_name, std::string pw, std::string url);
+    Account(std::string&& name, std::string&& user_name, std::string&& pw, std::string&& url);
+    Account(Account& other);
     ~Account();
     void PrintAccountDetails();
     
