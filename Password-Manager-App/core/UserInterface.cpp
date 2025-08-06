@@ -22,6 +22,25 @@ UserInterface::~UserInterface()
     std::cout << "UI deleted." << std::endl;
 }
 
+std::string GeneratePasswordUI()
+{
+    std::string pw_length;
+    std::string special_character_input;
+    bool special_character;
+    
+    std::cout << "Password length? ():" ;
+    std::getline(std::cin, pw_length);
+    std::cout << "Include special characters? (y) - (n)";
+    std::getline(std::cin, special_character_input);
+    
+    if (special_character_input == "y" || special_character_input == "yes")
+    { special_character = true; }
+    else { special_character = false; }
+    
+    Password pw = Password(std::stoi(pw_length), special_character);
+    return pw.GetPassword();
+}
+
 void UserInterface::PrintMenu()
 {
     std::cout << "--- MENU ---" << std::endl;
@@ -51,9 +70,7 @@ Account* ActionAddAccount()
     std::getline(std::cin, passwordRequest);
     if (passwordRequest == "y" || passwordRequest == "yes")
     {
-        Password* pw = new Password(40, true);
-        password = (*pw).GetPassword();
-        delete pw;
+        password = GeneratePasswordUI();
     }
     else
     {
@@ -131,9 +148,8 @@ void UserInterface::ActionMenu()
             
         case MenuItem::GENERATE_PASSWORD:
         {
-            Password* pw = new Password(40, true);
-            std::cout << "Password: " << (*pw).GetPassword() << std::endl;
-            delete pw;
+            std::string password = GeneratePasswordUI();
+            std::cout << password << std::endl;
             break;
         }
             
