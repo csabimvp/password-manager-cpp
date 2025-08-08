@@ -22,7 +22,7 @@ UserInterface::~UserInterface()
     std::cout << "UI deleted." << std::endl;
 }
 
-std::string GeneratePasswordUI()
+static std::string GeneratePasswordUI()
 {
     std::string pw_length;
     std::string special_character_input;
@@ -38,6 +38,7 @@ std::string GeneratePasswordUI()
     else { special_character = false; }
     
     Password pw = Password(std::stoi(pw_length), special_character);
+    pw.GetEncryptedPassword();
     return pw.GetPassword();
 }
 

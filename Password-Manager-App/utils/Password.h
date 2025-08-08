@@ -16,12 +16,18 @@ private:
     int m_Length;
     bool m_SpecialCharacter;
     std::string m_Password;
+    std::string m_EncryptedPassword;
 public:
     Password();
     Password(int length, bool special_c);
     ~Password();
     void RandomPassword();
     std::string GetPassword();
+    std::string GetEncryptedPassword();
+    std::string EncryptPassword();
+    // This function takes an rvalue reference
+    // Useful for efficiently moving resources from temporary objects
+    std::string DecryptPassword(const std::string&& encrypted_password);
 };
 
 #endif

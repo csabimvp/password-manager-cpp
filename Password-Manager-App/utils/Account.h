@@ -8,6 +8,7 @@
 #ifndef UTILS_ACCOUNT_H
 #define UTILS_ACCOUNT_H
 
+#include "Password.h"
 #include <string>
 #include <chrono>
 #include <iostream>
@@ -18,6 +19,7 @@ private:
     std::string m_AccountName;
     std::string m_AccountUserName;
     std::string m_Password;
+//    Password* m_PasswordPtr;
     std::string m_URL;
     std::chrono::system_clock::time_point m_Created;
 public:
@@ -29,6 +31,7 @@ public:
     std::string GetAccountName();
     std::string GetAccountuserName();
     std::string GetAccountPassword();
+//    std::string GetAccountEncryptedPassword();
     std::string GetAccountUrl();
 };
 
