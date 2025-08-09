@@ -4,7 +4,7 @@
 
 int main()
 {
-    auto path = std::filesystem::path{"/Users/csabimvp/dev/projects/xcode-projects/Password-Manager-App/Passwords.txt"};
+    const auto path = std::filesystem::path{"/Users/csabimvp/dev/projects/xcode-projects/Password-Manager-App/Passwords.txt"};
     Database* db_pointer = new Database(path);
     UserInterface ui(db_pointer);
     
