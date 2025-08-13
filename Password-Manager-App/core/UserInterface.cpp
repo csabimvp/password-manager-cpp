@@ -22,7 +22,8 @@ UserInterface::~UserInterface()
     std::cout << "UI deleted." << std::endl;
 }
 
-static std::string GeneratePasswordUI()
+//static std::string GeneratePasswordUI()
+static Password* GeneratePasswordUI()
 {
     std::string pw_length;
     std::string special_character_input;
@@ -37,9 +38,11 @@ static std::string GeneratePasswordUI()
     { special_character = true; }
     else { special_character = false; }
     
-    Password pw = Password(std::stoi(pw_length), special_character);
-    pw.GetEncryptedPassword();
-    return pw.GetPassword();
+    Password* pw = new Password(std::stoi(pw_length), special_character);
+//    pw.GetEncryptedPassword();
+//    return pw.GetPassword();
+    (*pw).GetEncryptedPassword();
+    return pw;
 }
 
 void UserInterface::PrintMenu()
@@ -59,7 +62,9 @@ Account* ActionAddAccount()
 {
     std::string account_name;
     std::string account_user_name;
-    std::string password;
+//    std::string password;
+    Password* password;
+    std::string manualPasswordEntry;
     std::string passwordRequest;
     std::string url;
     
@@ -76,12 +81,17 @@ Account* ActionAddAccount()
     else
     {
         std::cout << "Enter Account Password: ";
-        std::getline(std::cin, password);
+        std::getline(std::cin, manualPasswordEntry);
+        password = nullptr;
     }
     std::cout << "Enter URL: ";
     std::getline(std::cin, url);
     
-    Account* acc_ptr = new Account(std::move(account_name), std::move(account_user_name), std::move(password), std::move(url));
+    Account* acc_ptr = new Account(std::move(account_name),
+                                   std::move(account_user_name),
+                                   std::move(url),
+                                   password
+                                   );
     return acc_ptr;
 }
 
@@ -149,8 +159,10 @@ void UserInterface::ActionMenu()
             
         case MenuItem::GENERATE_PASSWORD:
         {
-            std::string password = GeneratePasswordUI();
-            std::cout << password << std::endl;
+//            std::string password = GeneratePasswordUI();
+//            std::cout << password << std::endl;
+            Password* pw_ptw = GeneratePasswordUI();
+            std::cout << (*pw_ptw).GetPassword() << std::endl;
             break;
         }
             

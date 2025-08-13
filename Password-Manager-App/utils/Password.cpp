@@ -91,6 +91,14 @@ Password::Password(int length, bool special_c)
     RandomPassword();
 }
 
+Password::Password(const std::string& encrypted_password)
+: m_EncryptedPassword(encrypted_password)
+{
+    m_Password = DecryptPassword(encrypted_password);
+    m_Length = (int)m_Password.size();
+    m_SpecialCharacter = false;
+}
+
 Password::~Password()
 {
     std::cout << m_Password << " was deleted." << std::endl;
@@ -106,7 +114,7 @@ std::string Password::EncryptPassword()
     return "hello";
 }
 
-std::string Password::DecryptPassword(const std::string&& encrypted_password)
+std::string Password::DecryptPassword(const std::string& encrypted_password)
 {
     std::string decrypted_password;
     for (char i = 2; i <= encrypted_password.size(); i += 5)

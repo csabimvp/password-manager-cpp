@@ -20,6 +20,7 @@ private:
 public:
     Password();
     Password(int length, bool special_c);
+    Password(const std::string& encrypted_password);
     ~Password();
     void RandomPassword();
     std::string GetPassword();
@@ -27,7 +28,7 @@ public:
     std::string EncryptPassword();
     // This function takes an rvalue reference
     // Useful for efficiently moving resources from temporary objects
-    std::string DecryptPassword(const std::string&& encrypted_password);
+    std::string DecryptPassword(const std::string& encrypted_password);
 };
 
 #endif

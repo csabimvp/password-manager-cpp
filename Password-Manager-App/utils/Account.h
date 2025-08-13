@@ -18,16 +18,21 @@ class Account
 private:
     std::string m_AccountName;
     std::string m_AccountUserName;
-    std::string m_Password;
-//    Password* m_PasswordPtr;
+    Password* m_PasswordPtr;
     std::string m_URL;
     std::chrono::system_clock::time_point m_Created;
 public:
-    Account(std::string&& name, std::string&& user_name, std::string&& pw, std::string&& url);
+    Account(
+            std::string&& name,
+            std::string&& user_name,
+            std::string&& url,
+            Password* pw
+    );
+    // Copy constructor
     Account(Account& other);
     ~Account();
-    void PrintAccountDetails();
     
+    void PrintAccountDetails();
     std::string GetAccountName();
     std::string GetAccountuserName();
     std::string GetAccountPassword();

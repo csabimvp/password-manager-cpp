@@ -55,6 +55,11 @@ std::vector<std::vector<std::string>> Database::LoadDatabase(const std::string& 
     return data;
 }
 
+static bool sortAccounts(Account* acc1, Account* acc2)
+{
+    return (*acc1).GetAccountName() < (*acc2).GetAccountName();
+}
+
 Database::Database(const std::string& file_name)
 :m_FileName(file_name)
 {
@@ -63,10 +68,18 @@ Database::Database(const std::string& file_name)
     
     for (auto item : m_RawData)
     {
-        Account* acc_ptr = new Account(std::move(item[0]), std::move(item[1]), std::move(item[2]), std::move(item[3]));
+        const std::string raw_pw = item[3];
+        std::transform(item[0].begin(), item[0].end(), item[0].begin(), [](unsigned char c) {return std::tolower(c);});
+        Password* pw_ptr = new Password(raw_pw);
+        Account* acc_ptr = new Account(
+                                       std::move(item[0]),
+                                       std::move(item[1]),
+                                       std::move(item[2]),
+                                       pw_ptr);
         m_Accounts.push_back(acc_ptr);
     }
     
+    std::sort(m_Accounts.begin(), m_Accounts.end(), sortAccounts);
     std::cout << "#" << m_RawData.size() << " Accounts loaded." << std::endl;
 }
 
