@@ -2,7 +2,8 @@
 
 
 ## To Do's:
-Code the below.
+- Add GUI
+- Database to sync with webserver database. We will need to send and recieve HTTPS requests. Cloud database has to match Password Safe Data model in order to work. Otherwise it could get messy.
 
 ### Account:
 class members:
@@ -27,6 +28,7 @@ class members:
 - Accounts
 
 - Reading and Exporting files to match specific formats, CSV, Tabular, json?
+-- Load Database from Cloud or Local. Insert Path every time or Hardcode it?
 
 ## User Interface:
 ### Main menu:
