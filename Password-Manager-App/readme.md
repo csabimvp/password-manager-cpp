@@ -2,14 +2,59 @@
 
 
 ## To Do's:
-implement Edit Account Functionality for the program.
-<!--1) Refactor Account class to replace passowrd string with Password pointer instead.-->
-<!--2) This way we will have access to the Password class encription and decription functionalities.-->
-* Once this is done should we remove the password field and have the encrypted version only at all times? 
+Code the below.
 
-Keep the Accounts sorted by their AccountNames.
+### Account:
+class members:
+- Title,
+-- generate LowerCaseTitle for sorting
+- Username,
+- Password pointer for Password class
+- URL,
+- Created Time,
+- Email,
+- Notes
 
-3) Think about a better encription key solution.
+### Passwords:
+- EncryptedPassword,
+- DecryptedPassword,
+- Length,
+- SpecialCharacters
+
+### Database:
+- FilePath,
+- RawData -- we should not need this, increase memory performance
+- Accounts
+
+- Reading and Exporting files to match specific formats, CSV, Tabular, json?
+
+## User Interface:
+### Main menu:
+        SHOW_ACCOUNTS       = 1,
+        ADD_ACCOUNT,        // 2
+        EDIT_ACCOUNT,       // 3
+        DELETE_ACCOUNT,     // 4
+        GENERATE_PASSWORD,  // 5
+        SAVE_DATABASE,      // 6
+        EXIT                // 7
+        
+We don't need to show all Account class members for #1 SHOW_ACCOUNTS, however would we need a menu item to show everything for one specific account?
+
+### Sub Menus
+**ADD_ACCOUNT** and ** EDIT_ACCOUNT** could be the same code, as the functionality is similar. We just need to Select an account for the edit version.
+- Title,
+- Username,
+- Password,
+- URL,
+- Created Time,
+- Email,
+- Notes
+
+**DELETE_ACCOUNT**
+- Select an account to DELETE
+
+**SAVE_DATABASE**
+- Format specific sub_menu?
 
 
 ## Key Learning
