@@ -17,15 +17,15 @@
 class Database
 {
 private:
-    std::string m_FileName;
-    std::vector<std::vector<std::string>> m_RawData;
+    std::string m_FilePath;
     std::vector<Account*> m_Accounts;
 public:
-    Database(const std::string& file_name);
+    Database(const std::string& file_path);
     Database(Database& other);
     ~Database();
     std::vector<std::string> ParseLine(std::string&& row);
-    std::vector<std::vector<std::string>> LoadDatabase(const std::string& fileName);
+//    bool SortAccounts(Account* acc1, Account* acc2);
+    void LoadDatabase();
     void PrintAll();
     void AddAccount(Account* acc_ptr);
     void DeleteAccount(const int& acc_index);

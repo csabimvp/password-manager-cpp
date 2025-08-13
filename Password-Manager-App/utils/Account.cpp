@@ -7,55 +7,57 @@
 
 #include "Account.h"
 
-//#include <algorithm>
-//#include <cctype>
-//#include <string>
-//
-// should try to do this with a lambda function.
-//std::string data = "Abc";
-//std::transform(data.begin(), data.end(), data.begin(),
-//    [](unsigned char c){ return std::tolower(c); });
-
 Account::Account(
-                 std::string&& name,
-                 std::string&& user_name,
-                 std::string&& url,
+                 // User / Database Inputs
+                 const std::string&& title,
+                 const std::string&& user_name,
+                 const std::string&& email,
+                 const std::string&& url,
+                 const std::string&& notes,
+                 const std::string&& created_time,
+                 // Password Pointer
                  Password* pw
                  )
-: m_AccountName(name), m_AccountUserName(user_name), m_PasswordPtr(pw), m_URL(url)
+: m_Title(title), m_UserName(user_name), m_PasswordPointer(pw), m_URL(url), m_Email(email), m_Notes(notes)
 {
-    m_Created = std::chrono::system_clock::now();
+    // Creating lower case Title for sorting purposes.
+    std::transform(m_Title.begin(), m_Title.end(), m_LowerCaseTitle.begin(), [](unsigned char c) { return std::tolower(c); });
+    
+    // Adding CreatedTime
+//    m_CreatedTime = std::chrono::system_clock::now();
+    m_CreatedTime = created_time;
 }
 
 Account::Account(Account& other)
 {
-    std::cout << m_AccountName << " was copied." << std::endl;
+    std::cout << m_Title << " was copied." << std::endl;
 }
 
 Account::~Account()
 {
-    delete m_PasswordPtr;
-    std::cout << m_AccountName << " was deleted." << std::endl;
+    delete m_PasswordPointer;
+    std::cout << m_Title << " was deleted." << std::endl;
 }
 
 void Account::PrintAccountDetails()
 {
     std::cout
-    << m_AccountName
+    << m_Title
     << ", "
-    << m_AccountUserName
+    << m_UserName
     << ", "
 //    << m_Password
     
     << ", "
     << m_URL
     << ", "
-    << m_Created
+    << m_CreatedTime
     << std::endl;
 }
 
-std::string Account::GetAccountName() { return m_AccountName; }
-std::string Account::GetAccountuserName() { return m_AccountUserName; }
-//std::string Account::GetAccountPassword() { return m_Password; }
-std::string Account::GetAccountPassword() { return (*m_PasswordPtr).GetPassword(); }
+std::string Account::GetAccountTitle() { return m_Title; }
+std::string Account::GetAccountLowerCaseTitle() { return m_LowerCaseTitle; }
+std::string Account::GetAccountUserName() { return m_UserName; }
+std::string Account::GetAccountEmail() { return m_Email; }
 std::string Account::GetAccountUrl() { return m_URL; }
+std::string Account::GetAccountPassword() { return (*m_PasswordPointer).GetPassword(); }

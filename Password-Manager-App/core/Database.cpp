@@ -11,10 +11,10 @@
 
 std::vector<std::string> Database::ParseLine(std::string&& row)
 {
-    // Creating a vector for each row, and reserving 5 items to increase performance.
-    // This 5 needs to be incremented once we are adding more data into the rows.
+    // Creating a vector for each row, and reserving 10 items to increase performance.
+    // This 10 is to capture all class member data.
     std::vector<std::string> rowData;
-    rowData.reserve(5);
+    rowData.reserve(10);
     size_t start = 0;
     bool inQuotes = false;
     
@@ -30,57 +30,57 @@ std::vector<std::string> Database::ParseLine(std::string&& row)
             inQuotes = true;
         }
     }
+
     rowData.push_back(row.substr(start));
     return rowData;
 }
 
-std::vector<std::vector<std::string>> Database::LoadDatabase(const std::string& fileName)
+void Database::LoadDatabase()
 {
-    std::vector<std::vector<std::string>> data;
-    data.reserve(20);
-    std::ifstream file(fileName);
+    std::vector<std::string> data;
+    data.reserve(10);
+    std::ifstream file(m_FilePath);
     
     if (!file.is_open())
     {
-        std::cerr << "Failed to open file: " << fileName << std::endl;
+        std::cerr << "Failed to open file: " << m_FilePath << std::endl;
     }
     
     std::string line;
     while (std::getline(file, line))
     {
-        data.push_back(ParseLine(std::move(line)));
+        // Read Line
+        data = ParseLine(std::move(line));
+        
+        // Create Account object from row
+        Password* pw = new Password(false, std::move(data[6]));
+        Account* acc = new Account(
+                                   std::move(data[0]),
+                                   std::move(data[1]),
+                                   std::move(data[2]),
+                                   std::move(data[3]),
+                                   std::move(data[4]),
+                                   std::move(data[5]),
+                                   pw
+                                   );
+        m_Accounts.push_back(acc);
     }
     
     file.close();
-    return data;
 }
 
-static bool sortAccounts(Account* acc1, Account* acc2)
+static bool SortAccounts(Account* acc1, Account* acc2)
 {
-    return (*acc1).GetAccountName() < (*acc2).GetAccountName();
+    return (*acc1).GetAccountLowerCaseTitle() < (*acc2).GetAccountLowerCaseTitle();
 }
 
-Database::Database(const std::string& file_name)
-:m_FileName(file_name)
+Database::Database(const std::string& file_path)
+:m_FilePath(file_path)
 {
-    m_RawData = LoadDatabase(m_FileName);
-    std::cout << "Database loaded from: " << file_name << std::endl;
+    std::cout << "Database loaded from: " << file_path << std::endl;
     
-    for (auto item : m_RawData)
-    {
-        const std::string raw_pw = item[3];
-        std::transform(item[0].begin(), item[0].end(), item[0].begin(), [](unsigned char c) {return std::tolower(c);});
-        Password* pw_ptr = new Password(raw_pw);
-        Account* acc_ptr = new Account(
-                                       std::move(item[0]),
-                                       std::move(item[1]),
-                                       std::move(item[2]),
-                                       pw_ptr);
-        m_Accounts.push_back(acc_ptr);
-    }
-    
-    std::sort(m_Accounts.begin(), m_Accounts.end(), sortAccounts);
-    std::cout << "#" << m_RawData.size() << " Accounts loaded." << std::endl;
+    std::sort(m_Accounts.begin(), m_Accounts.end(), SortAccounts);
+    std::cout << "#" << m_Accounts.size() << " Accounts loaded." << std::endl;
 }
 
 Database::Database(Database& other)
@@ -119,9 +119,9 @@ void Database::PrintAll()
         std::cout << std::left << std::setw(4) << std::setfill(' ')
         << i;
         std::cout << std::left << std::setw(20) << std::setfill(' ')
-        << (*m_Accounts[i]).GetAccountName();
+        << (*m_Accounts[i]).GetAccountTitle();
         std::cout << std::left << std::setw(25) << std::setfill(' ')
-        << (*m_Accounts[i]).GetAccountuserName();
+        << (*m_Accounts[i]).GetAccountUserName();
         std::cout << std::left << std::setw(50) << std::setfill(' ')
         << (*m_Accounts[i]).GetAccountPassword();
         std::cout << std::left << std::setw(50) << std::setfill(' ')
@@ -143,14 +143,14 @@ void Database::DeleteAccount(const int& acc_index)
 
 void Database::SaveDatabase()
 {
-    std::ofstream file(m_FileName, std::ios::out);
+    std::ofstream file(m_FilePath, std::ios::out);
     if (file.is_open())
     {
         for (auto const& account : m_Accounts)
         {
-            file << (*account).GetAccountName();
+            file << (*account).GetAccountTitle();
             file << ",";
-            file << (*account).GetAccountuserName();
+            file << (*account).GetAccountUserName();
             file << ",";
             file << (*account).GetAccountPassword();
             file << ",";
@@ -162,6 +162,6 @@ void Database::SaveDatabase()
     }
     else
     {
-        std::cerr << "Failed to open file: " << m_FileName << std::endl;
+        std::cerr << "Failed to open file: " << m_FilePath << std::endl;
     }
 }

@@ -16,16 +16,23 @@
 class Account
 {
 private:
-    std::string m_AccountName;
-    std::string m_AccountUserName;
-    Password* m_PasswordPtr;
+    std::string m_Title;
+    std::string m_LowerCaseTitle;
+    std::string m_UserName;
+    std::string m_Email;
     std::string m_URL;
-    std::chrono::system_clock::time_point m_Created;
+    std::string m_Notes;
+//    std::chrono::system_clock::time_point m_CreatedTime;
+    std::string m_CreatedTime;
+    Password* m_PasswordPointer;
 public:
     Account(
-            std::string&& name,
-            std::string&& user_name,
-            std::string&& url,
+            const std::string&& title,
+            const std::string&& user_name,
+            const std::string&& email,
+            const std::string&& url,
+            const std::string&& notes,
+            const std::string&& created_time,
             Password* pw
     );
     // Copy constructor
@@ -33,11 +40,13 @@ public:
     ~Account();
     
     void PrintAccountDetails();
-    std::string GetAccountName();
-    std::string GetAccountuserName();
+    std::string GetAccountTitle();
+    std::string GetAccountLowerCaseTitle();
+    std::string GetAccountUserName();
     std::string GetAccountPassword();
-//    std::string GetAccountEncryptedPassword();
+    std::string GetAccountEmail();
     std::string GetAccountUrl();
+    //    std::string GetAccountEncryptedPassword();
 };
 
 #endif
