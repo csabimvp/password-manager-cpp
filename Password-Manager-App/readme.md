@@ -18,9 +18,9 @@ class members:
 
 ### Passwords:
 - EncryptedPassword,
-- DecryptedPassword,
-- Length,
-- SpecialCharacters
+- Password/DecryptedPassword,
+- Length            -- No need, no good use..
+- SpecialCharacters -- No need, no good use..
 
 ### Database:
 - FilePath,
