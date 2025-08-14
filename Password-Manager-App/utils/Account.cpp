@@ -21,10 +21,8 @@ Account::Account(
 : m_Title(title), m_UserName(user_name), m_PasswordPointer(pw), m_URL(url), m_Email(email), m_Notes(notes)
 {
     // Creating lower case Title for sorting purposes.
+    m_LowerCaseTitle.resize(m_Title.length());
     std::transform(m_Title.begin(), m_Title.end(), m_LowerCaseTitle.begin(), [](unsigned char c) { return std::tolower(c); });
-    
-    // Adding CreatedTime
-//    m_CreatedTime = std::chrono::system_clock::now();
     m_CreatedTime = created_time;
 }
 
@@ -60,4 +58,17 @@ std::string Account::GetAccountLowerCaseTitle() { return m_LowerCaseTitle; }
 std::string Account::GetAccountUserName() { return m_UserName; }
 std::string Account::GetAccountEmail() { return m_Email; }
 std::string Account::GetAccountUrl() { return m_URL; }
+std::string Account::GetAccountNotes()
+{
+    if (m_Notes.empty())
+    {
+        return "None";
+    }
+    else
+    {
+        return m_Notes;
+    }
+}
+std::string Account::GetAccountCreatedTime() { return m_CreatedTime; }
 std::string Account::GetAccountPassword() { return (*m_PasswordPointer).GetPassword(); }
+std::string Account::GetAccountEncryptedPassword() { return (*m_PasswordPointer).GetEncryptedPassword(); }

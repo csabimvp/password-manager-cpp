@@ -9,6 +9,7 @@
 #include "../utils/Password.h"
 #include <string>
 #include <iostream>
+#include <time.h>
 
 UserInterface::UserInterface(Database* db_pointer)
 :m_Database_ptr(db_pointer)
@@ -39,9 +40,6 @@ static Password* GeneratePasswordUI()
     else { special_character = false; }
     
     Password* pw = new Password(std::stoi(pw_length), special_character);
-//    pw.GetEncryptedPassword();
-//    return pw.GetPassword();
-    (*pw).GetEncryptedPassword();
     return pw;
 }
 
@@ -55,24 +53,26 @@ void UserInterface::PrintMenu()
     std::cout << "#5 - GENERATE PASSWORD" << std::endl;
     std::cout << "#6 - SAVE DATABASE" << std::endl;
     std::cout << "#7 - EXIT" << std::endl;
-    std::cout << "#";
+    std::cout << "#():";
 }
 
 Account* ActionAddAccount()
 {
-    std::string account_name;
+    std::string account_title;
     std::string account_user_name;
 //    std::string password;
     Password* password;
     std::string manualPasswordEntry;
     std::string passwordRequest;
     std::string url;
+    std::string email;
+    std::string notes = " ";
     
-    std::cout << "Enter Account Name: ";
-    std::getline(std::cin, account_name);
-    std::cout << "Enter Account User Name: ";
+    std::cout << "Enter Account Title ():";
+    std::getline(std::cin, account_title);
+    std::cout << "Enter Account User Name ():";
     std::getline(std::cin, account_user_name);
-    std::cout << "Generate new Password? ()";
+    std::cout << "Generate new Password? (y) - (n):";
     std::getline(std::cin, passwordRequest);
     if (passwordRequest == "y" || passwordRequest == "yes")
     {
@@ -80,18 +80,30 @@ Account* ActionAddAccount()
     }
     else
     {
-        std::cout << "Enter Account Password: ";
+        std::cout << "Enter Account Password ():";
         std::getline(std::cin, manualPasswordEntry);
         password = nullptr;
     }
-    std::cout << "Enter URL: ";
+    std::cout << "Enter URL ():";
     std::getline(std::cin, url);
+    std::cout << "Enter Email ():";
+    std::getline(std::cin, email);
+    std::cout << "Enter Notes (default ' '):";
+    std::getline(std::cin, notes);
     
-    Account* acc_ptr = new Account(std::move(account_name),
-                                   std::move(account_user_name),
-                                   std::move(url),
-                                   password
-                                   );
+    time_t timestamp = time(NULL);
+    struct tm timeinfo = *localtime(&timestamp);
+    char created_time [40];
+    strftime(created_time, 40, "%d-%m-%Y %H:%M:%S", &timeinfo);
+    Account* acc_ptr = new Account(
+                               std::move(account_title),
+                               std::move(account_user_name),
+                               std::move(email),
+                               std::move(url),
+                               std::move(notes),
+                               std::move(created_time),
+                               password
+                               );
     return acc_ptr;
 }
 
@@ -134,6 +146,8 @@ void UserInterface::ActionMenu()
         {
             Account* accptr = ActionAddAccount();
             (*m_Database_ptr).AddAccount(accptr);
+            std::cout << (*accptr).GetAccountTitle() << " added to Database." << std::endl;
+            
             break;
         }
             
@@ -163,6 +177,7 @@ void UserInterface::ActionMenu()
 //            std::cout << password << std::endl;
             Password* pw_ptw = GeneratePasswordUI();
             std::cout << (*pw_ptw).GetPassword() << std::endl;
+            delete pw_ptw;
             break;
         }
             

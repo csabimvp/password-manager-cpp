@@ -16,7 +16,7 @@ void Password::EncryptPassword()
     const std::string specialCharacterList = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@£$%&*-_+=";
     unsigned seed = (int)std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(seed);
-    std::uniform_int_distribution<int> distribution(0, static_cast<int>(specialCharacterList.size()) - 1);
+    std::uniform_int_distribution<int> distribution(0, static_cast<int>(specialCharacterList.length()) - 1);
     
     for (auto c : m_Password)
     {
@@ -39,7 +39,7 @@ void Password::EncryptPassword()
 // m_EncryptedPassword -> m_Password
 void Password::DecryptPassword()
 {
-    for (char i = 2; i <= m_EncryptedPassword.size(); i += 5)
+    for (auto i = 2; i <= m_EncryptedPassword.length(); i += 5)
     {
         m_Password += m_EncryptedPassword[i];
     }
@@ -59,7 +59,7 @@ void Password::RandomPassword(const int& length, const bool& special_c)
     
     if (special_c)
     {
-        std::uniform_int_distribution<int> distribution(0, static_cast<int>(specialCharacterList.size()) - 1);
+        std::uniform_int_distribution<int> distribution(0, static_cast<int>(specialCharacterList.length()) - 1);
         for (int i = 0; i < length; i ++)
         {
             char ch = specialCharacterList[distribution(generator)];
@@ -68,7 +68,7 @@ void Password::RandomPassword(const int& length, const bool& special_c)
     }
     else
     {
-        std::uniform_int_distribution<int> distribution(0, static_cast<int>(characterList.size()) - 1);
+        std::uniform_int_distribution<int> distribution(0, static_cast<int>(characterList.length()) - 1);
         for (int i = 0; i < length; i ++)
         {
             char ch = characterList[distribution(generator)];

@@ -46,7 +46,9 @@ public:
     std::string GetAccountPassword();
     std::string GetAccountEmail();
     std::string GetAccountUrl();
-    //    std::string GetAccountEncryptedPassword();
+    std::string GetAccountNotes();
+    std::string GetAccountCreatedTime();
+    std::string GetAccountEncryptedPassword();
 };
 
 #endif

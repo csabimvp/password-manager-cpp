@@ -38,7 +38,7 @@ std::vector<std::string> Database::ParseLine(std::string&& row)
 void Database::LoadDatabase()
 {
     std::vector<std::string> data;
-    data.reserve(10);
+//    data.reserve(10);
     std::ifstream file(m_FilePath);
     
     if (!file.is_open())
@@ -77,8 +77,8 @@ static bool SortAccounts(Account* acc1, Account* acc2)
 Database::Database(const std::string& file_path)
 :m_FilePath(file_path)
 {
+    LoadDatabase();
     std::cout << "Database loaded from: " << file_path << std::endl;
-    
     std::sort(m_Accounts.begin(), m_Accounts.end(), SortAccounts);
     std::cout << "#" << m_Accounts.size() << " Accounts loaded." << std::endl;
 }
@@ -152,9 +152,15 @@ void Database::SaveDatabase()
             file << ",";
             file << (*account).GetAccountUserName();
             file << ",";
-            file << (*account).GetAccountPassword();
+            file << (*account).GetAccountEmail();
             file << ",";
             file << (*account).GetAccountUrl();
+            file << ",";
+            file << (*account).GetAccountNotes();
+            file << ",";
+            file << (*account).GetAccountCreatedTime();
+            file << ",";
+            file << (*account).GetAccountEncryptedPassword();
             file << "\n";
         }
         file.close();
